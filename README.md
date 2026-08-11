@@ -168,3 +168,12 @@ pnpm deploy:preview
 ```
 
 不要直接使用 `wrangler deploy` 作为部署命令。当前项目基于 `vinext`，应由 `vinext deploy` 负责生成所需配置、构建并调用 Wrangler。
+
+## License
+
+Copyright (C) 2026 bhwa233
+
+本项目采用 [GNU Affero General Public License v3.0](LICENSE) 授权。
+
+你可以自由使用、修改和分发本项目，但衍生作品必须同样以 AGPL-3.0 开源；
+若通过网络提供服务，也必须向使用者提供对应的完整源代码。

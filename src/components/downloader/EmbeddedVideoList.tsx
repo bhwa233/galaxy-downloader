@@ -184,7 +184,6 @@ export function EmbeddedVideoList({
                                             text={dict.result.playVideo}
                                             icon={Play}
                                             variant="secondary"
-                                            disabled={isCurrentItem}
                                             className="w-full"
                                             onClick={() => onSelectItem?.(video.id)}
                                         />

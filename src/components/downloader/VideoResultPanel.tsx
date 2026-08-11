@@ -233,6 +233,12 @@ export function VideoResultPanel({
             currentPage: previous.key === activeListKey ? previous.currentPage : result.currentPage,
             currentItemId: itemId,
         }));
+        // 合集列表里的按钮就是「播放」，选中后直接起播，而不是只切换选中项
+        const preview = buildEmbeddedVideoPreview(shareSourceUrl, video, { autoplay: true });
+        if (preview) {
+            onRequestPreview({ ...preview, origin: 'user' });
+            return;
+        }
         onClearPreview();
     };
 

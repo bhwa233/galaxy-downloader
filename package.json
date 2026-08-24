@@ -13,10 +13,10 @@
     "test:watch": "vitest",
     "generate-og": "node scripts/generate-og-images.mjs",
     "generate-icons": "node scripts/generate-icons.mjs",
-    "deploy": "pnpm run prepare:ffmpeg-core && vinext deploy",
-    "deploy:ci": "pnpm run prepare:ffmpeg-core && vinext deploy --skip-build",
-    "deploy:preview": "pnpm run prepare:ffmpeg-core && vinext deploy --preview",
-    "deploy:dry-run": "pnpm run prepare:ffmpeg-core && vinext deploy --dry-run"
+    "deploy": "pnpm run prepare:ffmpeg-core && node scripts/deploy-with-retry.mjs",
+    "deploy:ci": "pnpm run prepare:ffmpeg-core && node scripts/deploy-with-retry.mjs --skip-build",
+    "deploy:preview": "pnpm run prepare:ffmpeg-core && node scripts/deploy-with-retry.mjs --preview",
+    "deploy:dry-run": "pnpm run prepare:ffmpeg-core && node scripts/deploy-with-retry.mjs --dry-run"
   },
   "dependencies": {
     "@ffmpeg/core": "0.12.9",

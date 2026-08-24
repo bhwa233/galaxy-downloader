@@ -155,6 +155,8 @@ Cloudflare Workers 部署请使用：
 pnpm deploy
 ```
 
+部署脚本会只针对 Cloudflare API 的 `971` 限流错误自动退避重试（默认间隔为 60、120、180 秒）。其他错误会立即失败，避免掩盖配置或构建问题。可通过 `CF_DEPLOY_MAX_ATTEMPTS` 和 `CF_DEPLOY_RETRY_DELAY_MS` 调整重试次数和基础等待时间。
+
 如果平台已经先执行过 `pnpm build`，部署命令请改为：
 
 ```bash

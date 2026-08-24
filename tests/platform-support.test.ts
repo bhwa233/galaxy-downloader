@@ -52,9 +52,9 @@ describe('getPlatformSupportItems', () => {
         const items = getPlatformSupportItems(dict as unknown as Pick<Dictionary, 'guide'>);
 
         const keys = items.map((item) => item.key);
-        expect(keys).toHaveLength(34);
+        expect(keys).toHaveLength(33);
         expect(keys).toContain('bilibili');
-        expect(keys).toContain('bilibiliTv');
+        expect(keys).not.toContain('bilibiliTv');
         expect(keys).toContain('douyin');
         expect(keys).toContain('wechat');
         expect(keys).toContain('weibo');
@@ -75,7 +75,7 @@ describe('getPlatformSupportItems', () => {
     it('keeps the API platform order in one compact list', () => {
         const items = getPlatformSupportItems(dict as unknown as Pick<Dictionary, 'guide'>);
 
-        expect(items.slice(0, 4).map((item) => item.key)).toEqual(['bilibili', 'bilibiliTv', 'douyin', 'generic']);
+        expect(items.slice(0, 4).map((item) => item.key)).toEqual(['bilibili', 'douyin', 'generic', 'youtube']);
         expect(items.slice(-4).map((item) => item.key)).toEqual(['coub', 'imgur', 'odysee', 'rutube']);
     });
 });

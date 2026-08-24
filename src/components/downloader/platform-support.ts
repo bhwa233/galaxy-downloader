@@ -2,7 +2,6 @@ import type { Dictionary } from '@/lib/i18n/types';
 
 export type PlatformSupportKey =
     | 'bilibili'
-    | 'bilibiliTv'
     | 'douyin'
     | 'vimeo'
     | 'dailymotion'
@@ -58,12 +57,6 @@ const UNIFIED_FRAME_CLASS_NAME = 'border-slate-200 bg-slate-100/70 dark:border-s
 
 const PLATFORM_SUPPORT_VISUALS: Record<PlatformSupportKey, PlatformSupportVisual> = {
     bilibili: { src: '/platform-icons/bilibili.svg', frameClassName: UNIFIED_FRAME_CLASS_NAME },
-    bilibiliTv: {
-        src: '/platform-icons/bilibili.svg',
-        frameClassName: UNIFIED_FRAME_CLASS_NAME,
-        badgeLabel: 'TV',
-        badgeClassName: 'bg-primary text-primary-foreground',
-    },
     douyin: { src: '/platform-icons/douyin.ico', frameClassName: UNIFIED_FRAME_CLASS_NAME, iconClassName: 'rounded-sm' },
     vimeo: { src: '/platform-icons/vimeo.svg', frameClassName: UNIFIED_FRAME_CLASS_NAME },
     dailymotion: { src: '/platform-icons/dailymotion.svg', darkSrc: '/platform-icons/dailymotion-dark.svg', frameClassName: UNIFIED_FRAME_CLASS_NAME },
@@ -99,7 +92,7 @@ const PLATFORM_SUPPORT_VISUALS: Record<PlatformSupportKey, PlatformSupportVisual
 };
 
 const PLATFORM_SUPPORT_CATALOG: PlatformSupportKey[] = [
-    'bilibili', 'bilibiliTv', 'douyin', 'generic', 'youtube', 'telegram',
+    'bilibili', 'douyin', 'generic', 'youtube', 'telegram',
     'threads', 'wechat', 'niconico', 'weibo', 'xiaohongshu', 'tiktok',
     'instagram', 'x', 'vimeo', 'dailymotion', 'streamable', 'reddit',
     'tumblr', 'pinterest', 'vk', 'okru', 'twitch', 'soundcloud',

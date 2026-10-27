@@ -70,6 +70,11 @@ export interface StaticPageMetaDict {
 }
 
 export interface DesktopDownloadDict {
+    pageTitle: string;
+    currentSystem: string;
+    backToWeb: string;
+    releaseNotes: string;
+    history: string;
     trigger: string;
     title: string;
     description: string;

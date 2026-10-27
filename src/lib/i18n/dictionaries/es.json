@@ -942,6 +942,11 @@
         "toastError": "No se pudo enviar. Inténtalo de nuevo."
     },
     "desktopDownload": {
+        "pageTitle": "Descargar Galaxy Downloader",
+        "currentSystem": "Tu sistema",
+        "backToWeb": "Volver a la versión web",
+        "releaseNotes": "Notas de la versión",
+        "history": "Versiones anteriores",
         "trigger": "App de escritorio",
         "title": "Descargar la app de escritorio",
         "description": "Gestiona las descargas en tu ordenador, con tareas por lotes e inicio de sesión en el navegador.",

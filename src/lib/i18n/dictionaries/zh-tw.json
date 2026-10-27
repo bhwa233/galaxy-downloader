@@ -940,6 +940,11 @@
         "toastError": "提交失敗，請重試"
     },
     "desktopDownload": {
+        "pageTitle": "下載 Galaxy Downloader",
+        "currentSystem": "目前系統",
+        "backToWeb": "返回網頁版",
+        "releaseNotes": "版本說明",
+        "history": "歷史版本",
         "trigger": "下載桌面版",
         "title": "下載桌面版",
         "description": "在電腦上管理下載，支援批次任務與瀏覽器登入。",

@@ -936,6 +936,11 @@
         "toastError": "送信に失敗しました。もう一度お試しください"
     },
     "desktopDownload": {
+        "pageTitle": "Galaxy Downloader をダウンロード",
+        "currentSystem": "お使いの OS",
+        "backToWeb": "ウェブ版に戻る",
+        "releaseNotes": "リリースノート",
+        "history": "過去のバージョン",
         "trigger": "デスクトップ版",
         "title": "デスクトップ版をダウンロード",
         "description": "一括タスクやブラウザーへのログインに対応。パソコンでダウンロードを管理。",

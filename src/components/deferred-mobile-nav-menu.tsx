@@ -11,12 +11,12 @@ const MobileNavMenu = dynamic(
     { ssr: false }
 )
 
-export function DeferredMobileNavMenu() {
+export function DeferredMobileNavMenu({ desktopPage = false }: { desktopPage?: boolean }) {
     const dict = useDictionary()
     const [mounted, setMounted] = useState(false)
 
     if (mounted) {
-        return <MobileNavMenu defaultOpen />
+        return <MobileNavMenu defaultOpen desktopPage={desktopPage} />
     }
 
     return (

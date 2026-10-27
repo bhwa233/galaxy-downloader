@@ -47,11 +47,12 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     optimizeDeps: {
-      exclude: ["lucide-react", "next-intl"],
+      include: ["lucide-react"],
+      exclude: ["next-intl"],
     },
     ssr: {
       optimizeDeps: {
-        exclude: ["lucide-react", "next-intl"],
+        exclude: ["next-intl"],
       },
     },
     resolve: {

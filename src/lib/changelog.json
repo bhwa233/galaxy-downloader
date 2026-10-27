@@ -1,6 +1,60 @@
 {
   "versions": [
     {
+      "version": "6.3.0",
+      "date": "2026-10-27",
+      "changes": {
+        "zh": [
+          "新增桌面端下载中心，集中展示 Windows、macOS 和 Linux 安装包及安装说明",
+          "优化桌面端版本信息加载，减少进入下载页后的等待",
+          "新增今日及累计解析次数展示",
+          "优化支持平台列表，增加平台品牌图标",
+          "修复播客音频分享及部分多语言显示问题",
+          "修复部分 Bilibili 封面加载问题，优化限额与上游限制的错误提示"
+        ],
+        "en": [
+          "Added a desktop download center with Windows, macOS, and Linux installers and installation instructions",
+          "Improved desktop release information loading to reduce waiting when opening the download page",
+          "Added today's and all-time parse counts",
+          "Improved the supported platforms list with platform brand icons",
+          "Fixed podcast audio sharing and some localization issues",
+          "Fixed loading issues with some Bilibili covers and clarified error messages for quotas and upstream restrictions"
+        ],
+        "ja": [
+          "Windows、macOS、Linux のインストーラーとインストール手順をまとめたデスクトップ版ダウンロードセンターを追加しました",
+          "デスクトップ版のリリース情報の読み込みを改善し、ダウンロードページを開いた際の待ち時間を短縮しました",
+          "本日および累計の解析回数の表示を追加しました",
+          "対応プラットフォーム一覧を改善し、各プラットフォームのブランドアイコンを追加しました",
+          "ポッドキャスト音声の共有と一部の多言語表示の問題を修正しました",
+          "一部の Bilibili カバー画像の読み込みを修正し、利用上限と接続先サービスの制限に関するエラー表示を改善しました"
+        ],
+        "zh-tw": [
+          "新增桌面版下載中心，集中顯示 Windows、macOS 和 Linux 安裝包及安裝說明",
+          "最佳化桌面版版本資訊載入，減少進入下載頁後的等待",
+          "新增今日及累計解析次數顯示",
+          "最佳化支援平台清單，新增平台品牌圖示",
+          "修復 Podcast 音訊分享及部分多語言顯示問題",
+          "修復部分 Bilibili 封面載入問題，改善額度與上游限制的錯誤提示"
+        ],
+        "es": [
+          "Se añadió un centro de descargas de escritorio con instaladores para Windows, macOS y Linux e instrucciones de instalación",
+          "Se mejoró la carga de información de versiones de escritorio para reducir la espera al abrir la página de descargas",
+          "Se añadieron los contadores de análisis de hoy y acumulados",
+          "Se mejoró la lista de plataformas compatibles con iconos de marca",
+          "Se corrigieron problemas al compartir audio de podcasts y algunos problemas de localización",
+          "Se corrigió la carga de algunas portadas de Bilibili y se aclararon los mensajes de error sobre cuotas y restricciones de los servicios de origen"
+        ],
+        "ru": [
+          "Добавлен центр загрузки настольного приложения с установщиками для Windows, macOS и Linux и инструкциями по установке",
+          "Улучшена загрузка информации о версиях настольного приложения, чтобы сократить ожидание при открытии страницы загрузки",
+          "Добавлены счётчики разборов за сегодня и за всё время",
+          "Улучшен список поддерживаемых платформ и добавлены их фирменные значки",
+          "Исправлены проблемы с отправкой ссылок на аудио подкастов и некоторые ошибки локализации",
+          "Исправлена загрузка некоторых обложек Bilibili и уточнены сообщения об исчерпании квот и ограничениях сервисов-источников"
+        ]
+      }
+    },
+    {
       "version": "6.2.0",
       "date": "2026-08-12",
       "changes": {

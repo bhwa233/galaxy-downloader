@@ -942,6 +942,11 @@
         "toastError": "Failed to submit, please try again"
     },
     "desktopDownload": {
+        "pageTitle": "Download Galaxy Downloader",
+        "currentSystem": "Your system",
+        "backToWeb": "Back to web app",
+        "releaseNotes": "Release notes",
+        "history": "Previous versions",
         "trigger": "Get desktop app",
         "title": "Download the desktop app",
         "description": "Manage downloads on your computer, with batch tasks and browser sign-in.",

@@ -15,6 +15,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
         const localeBase = buildLocaleUrl(locale)
         return [
             {
+                url: `${localeBase}/desktop`,
+                ...lastModifiedField,
+                changeFrequency: 'weekly' as const,
+                priority: locale === i18n.defaultLocale ? 0.8 : 0.7,
+                alternates: {
+                    languages: buildLanguageAlternates('/desktop'),
+                },
+            },
+            {
                 url: localeBase,
                 ...lastModifiedField,
                 changeFrequency: 'monthly' as const,

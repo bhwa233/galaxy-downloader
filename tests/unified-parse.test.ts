@@ -47,8 +47,37 @@ describe('requestUnifiedParse reload guard', () => {
     })
 
     afterEach(() => {
+        vi.restoreAllMocks()
         vi.unstubAllGlobals()
         resetUnifiedParseAttemptCountForTests()
+    })
+
+    it('shares one network request for concurrent parses of the same link', async () => {
+        const [first, second] = await Promise.all([
+            requestUnifiedParse('https://example.com/same'),
+            requestUnifiedParse('https://example.com/same'),
+        ])
+        expect(first).toEqual(second)
+        expect(fetchMock).toHaveBeenCalledTimes(1)
+        expect(dispatchEvent).toHaveBeenCalledTimes(1)
+    })
+
+    // Production had thousands of repeat requests after the hourly quota.
+    it('stops requests until Retry-After expires and then allows another parse', async () => {
+        const now = vi.spyOn(Date, 'now').mockReturnValue(1_000_000)
+        const limitedFetch = vi.fn()
+            .mockResolvedValueOnce(Response.json({ success: false, code: 'RATE_LIMITED' }, {
+                status: 429, headers: { 'Retry-After': '10' },
+            }))
+            .mockImplementation(async () => Response.json(responsePayload))
+        vi.stubGlobal('fetch', limitedFetch)
+
+        await expect(requestUnifiedParse('https://example.com/first')).rejects.toMatchObject({ status: 429 })
+        await expect(requestUnifiedParse('https://example.com/second')).rejects.toMatchObject({ status: 429 })
+        expect(limitedFetch).toHaveBeenCalledTimes(1)
+        now.mockReturnValue(1_010_001)
+        await expect(requestUnifiedParse('https://example.com/second')).resolves.toMatchObject({ success: true })
+        expect(limitedFetch).toHaveBeenCalledTimes(2)
     })
 
     it('reloads on the 61st parse attempt before sending another request', async () => {

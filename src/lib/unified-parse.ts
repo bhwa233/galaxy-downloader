@@ -11,6 +11,8 @@ export type UnifiedParseSuccessResult = UnifiedParseResult & {
 }
 
 let unifiedParseAttemptCount = 0
+const pendingParses = new Map<string, Promise<UnifiedParseSuccessResult>>()
+let parseCooldown: { until: number; error: ApiRequestError } | undefined
 
 export class UnifiedParseReloadError extends Error {
     constructor() {
@@ -21,6 +23,8 @@ export class UnifiedParseReloadError extends Error {
 
 export function resetUnifiedParseAttemptCountForTests() {
     unifiedParseAttemptCount = 0
+    pendingParses.clear()
+    parseCooldown = undefined
 }
 
 function maybeReloadUnifiedParsePage(): boolean {
@@ -37,7 +41,18 @@ function maybeReloadUnifiedParsePage(): boolean {
     return false
 }
 
-export async function requestUnifiedParse(videoUrl: string): Promise<UnifiedParseSuccessResult> {
+export function requestUnifiedParse(videoUrl: string): Promise<UnifiedParseSuccessResult> {
+    if (parseCooldown && Date.now() < parseCooldown.until) {
+        return Promise.reject(parseCooldown.error)
+    }
+    const pending = pendingParses.get(videoUrl)
+    if (pending) return pending
+    const request = fetchUnifiedParse(videoUrl).finally(() => pendingParses.delete(videoUrl))
+    pendingParses.set(videoUrl, request)
+    return request
+}
+
+async function fetchUnifiedParse(videoUrl: string): Promise<UnifiedParseSuccessResult> {
     if (maybeReloadUnifiedParsePage()) {
         throw new UnifiedParseReloadError()
     }
@@ -53,19 +68,32 @@ export async function requestUnifiedParse(videoUrl: string): Promise<UnifiedPars
     try {
         payload = await response.json() as UnifiedParseResult
     } catch {
-        throw new ApiRequestError({
-            status: response.status,
-        })
+        // A non-JSON 429 still carries Retry-After and must stop repeat calls.
+        payload = null
     }
 
     if (!response.ok || !payload?.success || !payload.data) {
-        throw new ApiRequestError({
+        const error = new ApiRequestError({
             code: payload?.code,
             status: payload?.status ?? response.status,
             requestId: payload?.requestId,
             details: payload?.details,
             fallbackMessage: payload?.error || payload?.message,
         })
+        if (response.status === 429 && payload?.code !== 'UPSTREAM_RATE_LIMITED') {
+            const retryAfter = response.headers.get('Retry-After')
+            const seconds = retryAfter?.trim() ? Number(retryAfter) : NaN
+            const resetAt = retryAfter && !Number.isFinite(seconds) ? Date.parse(retryAfter) : NaN
+            const detailSeconds = Number(payload?.details?.retryAfterSeconds)
+            const delayMs = Number.isFinite(seconds) && seconds >= 0
+                ? seconds * 1000
+                : Number.isFinite(resetAt)
+                    ? Math.max(0, resetAt - Date.now())
+                    : Number.isFinite(detailSeconds) && detailSeconds >= 0
+                        ? detailSeconds * 1000 : 60_000
+            parseCooldown = { until: Date.now() + delayMs, error }
+        }
+        throw error
     }
 
     notifyTodayParseStatsChanged()

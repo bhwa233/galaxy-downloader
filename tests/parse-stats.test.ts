@@ -24,6 +24,7 @@ describe('fetchTodayParseStats', () => {
             windowStart: '2026-08-12T16:00:00.000Z',
             windowEnd: '2026-08-13T16:00:00.000Z',
             count: 1234,
+            totalCount: 5678,
         }
         const fetchMock = mockFetch({ success: true, data: payload })
 
@@ -38,6 +39,7 @@ describe('fetchTodayParseStats', () => {
             windowStart: '2026-08-12T16:00:00.000Z',
             windowEnd: '2026-08-13T16:00:00.000Z',
             count: 1234,
+            totalCount: 5678,
         } })
 
         await fetchTodayParseStats({ cacheBuster: 'parse-complete' })

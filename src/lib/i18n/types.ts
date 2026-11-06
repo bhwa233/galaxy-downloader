@@ -538,6 +538,7 @@ export interface Dictionary {
         title: string;
         todayCountLabel: string;
         totalCountLabel: string;
+        last30DaysLabel: string;
     };
     freeSupport: {
         title: string;

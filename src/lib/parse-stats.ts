@@ -10,6 +10,8 @@ export interface TodayParseStats {
     windowEnd: string
     count: number
     totalCount: number
+    totalPeriodDays?: number
+    estimated?: boolean
 }
 
 function isTodayParseStats(value: unknown): value is TodayParseStats {

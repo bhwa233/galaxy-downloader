@@ -557,7 +557,8 @@
     "todayStats": {
         "title": "Estadísticas de análisis",
         "todayCountLabel": "Hoy",
-        "totalCountLabel": "Total"
+        "totalCountLabel": "Total",
+        "last30DaysLabel": "Últimos 30 días"
     },
     "freeSupport": {
         "title": "Servicio permanentemente gratuito",

@@ -557,7 +557,8 @@
     "todayStats": {
         "title": "Parse Statistics",
         "todayCountLabel": "Today",
-        "totalCountLabel": "Total"
+        "totalCountLabel": "Total",
+        "last30DaysLabel": "Last 30 days"
     },
     "freeSupport": {
         "title": "Permanently Free Service",

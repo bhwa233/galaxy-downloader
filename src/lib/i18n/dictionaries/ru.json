@@ -557,7 +557,8 @@
     "todayStats": {
         "title": "Статистика обработки",
         "todayCountLabel": "Сегодня",
-        "totalCountLabel": "Всего"
+        "totalCountLabel": "Всего",
+        "last30DaysLabel": "За 30 дней"
     },
     "freeSupport": {
         "title": "Постоянно бесплатная услуга",

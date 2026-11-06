@@ -144,10 +144,10 @@ export function TodayStatsCard({ dict }: TodayStatsCardProps) {
             <CardContent className="grid grid-cols-2 gap-6">
                 <div className="min-w-0">
                     <p className="break-words text-sm text-foreground/75">
-                        {dict.todayStats.totalCountLabel}
+                        {stats.totalPeriodDays === 30 ? dict.todayStats.last30DaysLabel : dict.todayStats.totalCountLabel}
                     </p>
                     <p className="mt-2 text-3xl font-semibold tabular-nums tracking-tight">
-                        {displayCounts.total.toLocaleString()}
+                        {stats.estimated ? '≈ ' : ''}{displayCounts.total.toLocaleString()}
                     </p>
                 </div>
                 <div className="min-w-0">
@@ -155,7 +155,7 @@ export function TodayStatsCard({ dict }: TodayStatsCardProps) {
                         {dict.todayStats.todayCountLabel}
                     </p>
                     <p className="mt-2 text-2xl font-medium tabular-nums">
-                        {displayCounts.today.toLocaleString()}
+                        {stats.estimated ? '≈ ' : ''}{displayCounts.today.toLocaleString()}
                     </p>
                 </div>
             </CardContent>

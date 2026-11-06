@@ -557,7 +557,8 @@
     "todayStats": {
         "title": "解析統計",
         "todayCountLabel": "今日",
-        "totalCountLabel": "累計"
+        "totalCountLabel": "累計",
+        "last30DaysLabel": "近 30 天"
     },
     "freeSupport": {
         "title": "永久免費服務",

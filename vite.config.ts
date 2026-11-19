@@ -44,6 +44,7 @@ function normalizeVinextTreeshakePlugin(): Plugin {
 
 export default defineConfig(({ command, mode }) => {
   const enableSerwist = command === "build" && mode === "production";
+  const useCloudflare = process.env.GALAXY_BUILD_TARGET !== "node";
 
   return {
     optimizeDeps: {
@@ -63,10 +64,12 @@ export default defineConfig(({ command, mode }) => {
     plugins: [
       vinext(),
       normalizeVinextTreeshakePlugin(),
-      ...cloudflare({
-        inspectorPort: false,
-        viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
-      }),
+      ...(useCloudflare
+        ? cloudflare({
+            inspectorPort: false,
+            viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
+          })
+        : []),
       ...(enableSerwist
         ? serwist({
             swSrc: "src/sw.ts",

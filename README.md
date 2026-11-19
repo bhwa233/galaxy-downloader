@@ -32,6 +32,8 @@
 
 ## 开始使用
 
+只想在本机或 NAS 上运行网页，可跳到 [Docker 部署](#docker-部署)。
+
 首先，运行开发服务器：
 
 ```bash
@@ -162,6 +164,45 @@ pnpm dev
 5. 多语言页面的 `hreflang` 与 canonical 是否一致
 
 ## 部署
+
+### Docker 部署
+
+Docker 容器只运行 Web 应用，不包含解析后端。浏览器会把待解析的链接发送到 `https://downloader-api.bhwa233.com`，解析、下载和播放仍受公共 API 的可用性及限流影响。下载文件保存在浏览器所在的设备，无需挂载下载目录，也无需在 NAS 上安装 FFmpeg。
+
+#### 使用已发布的镜像
+
+镜像发布后，可通过 Docker Compose 在 `linux/amd64` 或 `linux/arm64` 上部署，无需安装 Node.js 或 pnpm。将 [compose.yaml](./compose.yaml) 放到 Docker 主机，在同一目录创建 `.env`，并把 `vX.Y.Z` 替换为 `ghcr.io/bhwa233/galaxy-downloader` 中实际已发布的标签：
+
+```dotenv
+GALAXY_VERSION=vX.Y.Z
+```
+
+```bash
+docker compose pull
+docker compose up -d
+docker compose ps
+```
+
+- 默认访问 `http://localhost:3010`，仅 Docker 主机本机可访问。端口冲突时，可在 `.env` 中设置 `GALAXY_PORT=8080`。
+- 飞牛或其他 NAS 如需局域网访问，可在 `.env` 中设置 `GALAXY_BIND_IP=192.168.1.10`（替换成 NAS 的实际局域网 IP），重跑 `docker compose up -d` 后，用该 IP 和所配置的端口访问。不要将端口转发到公网；局域网设备如需使用 PWA，请配置 HTTPS 反向代理。
+- 升级或回滚时，将 `GALAXY_VERSION` 改成目标标签，再运行 `docker compose pull` 和 `docker compose up -d`。
+
+#### 从源码构建
+
+在正式镜像发布前，可在仓库根目录执行：
+
+```bash
+docker build -t galaxy-downloader:local .
+docker run --rm -p 127.0.0.1:3010:3010 galaxy-downloader:local
+```
+
+如果飞牛等 NAS 在拉取基础镜像时返回 `401 Unauthorized` 或超时，先用 `docker pull node:24-bookworm-slim` 单独检查 Docker Hub 或镜像加速器。若 NAS 无法联网构建，也可在同架构的联网机器上构建，通过 `docker save` 和 `docker load` 导入 NAS，再用上述 `docker run` 启动。
+
+#### 发布镜像
+
+维护者发布前需确认具备镜像分发授权，公开托管与镜像内 `@ffmpeg/core` 二进制相对应的完整源码（含所需构建脚本和声明），并在 Actions 仓库变量中设置 `FFMPEG_CORE_SOURCE_VERSION` 和 `FFMPEG_CORE_SOURCE_URL`。发布流程会校验版本和 URL，并把源码地址记录到镜像的 `com.bhwa233.galaxy-downloader.ffmpeg-core.source` 标签；请在发布说明中也提供该地址。推送 `vMAJOR.MINOR.PATCH` 标签触发正式镜像构建；首次发布后需在 GHCR 将包设为公开，并确认可以匿名拉取，再向用户公布版本。
+
+### Cloudflare Workers 部署
 
 默认使用 `vinext` 生成 `dist/` 构建产物。部署前请先执行：
 

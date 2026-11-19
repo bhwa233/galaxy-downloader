@@ -27,7 +27,9 @@ function isVinextRuntime(): boolean {
 
 export default async function createConfig(): Promise<NextConfig> {
     if (isVinextRuntime()) {
-        return nextConfig;
+        return process.env.GALAXY_BUILD_TARGET === "node"
+            ? { ...nextConfig, output: "standalone" }
+            : nextConfig;
     }
 
     const [

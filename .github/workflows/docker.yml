@@ -1,0 +1,92 @@
+name: Docker
+
+on:
+  pull_request:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Smoke test (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-24.04
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v6
+      - run: docker build --tag galaxy-downloader:ci .
+      - name: Check home page, robots, service worker and FFmpeg assets
+        run: |
+          docker run --detach --name galaxy-downloader-ci \
+            --publish 127.0.0.1:3010:3010 galaxy-downloader:ci
+          base_url=http://127.0.0.1:3010
+          curl --fail --silent --show-error --retry 15 --retry-delay 2 --retry-connrefused \
+            --output /tmp/galaxy-robots "$base_url/robots.txt"
+          grep -Fx 'Disallow: /' /tmp/galaxy-robots
+          curl --fail --silent --show-error --location --output /tmp/galaxy-home "$base_url/"
+          grep -q '<html' /tmp/galaxy-home
+          curl --fail --silent --show-error --output /tmp/galaxy-sw "$base_url/sw.js"
+          test -s /tmp/galaxy-sw
+          curl --fail --silent --show-error --output /dev/null "$base_url/ffmpeg-core/ffmpeg-core.js"
+          curl --fail --silent --show-error --range 0-7 --output /tmp/galaxy-wasm \
+            "$base_url/ffmpeg-core/ffmpeg-core.wasm.part-0"
+          test "$(od -An -tx1 -N8 /tmp/galaxy-wasm | xargs)" = '00 61 73 6d 01 00 00 00'
+      - name: Container logs
+        if: failure()
+        run: docker logs galaxy-downloader-ci
+
+  publish:
+    name: Publish versioned image
+    if: github.event_name == 'push' && github.ref_type == 'tag' && github.repository == 'bhwa233/galaxy-downloader'
+    needs: smoke
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v6
+      - name: Verify release tag and corresponding source
+        env:
+          FFMPEG_CORE_SOURCE_VERSION: ${{ vars.FFMPEG_CORE_SOURCE_VERSION }}
+          FFMPEG_CORE_SOURCE_URL: ${{ vars.FFMPEG_CORE_SOURCE_URL }}
+        run: |
+          if [[ ! "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo 'Docker releases require a vMAJOR.MINOR.PATCH tag.' >&2
+            exit 1
+          fi
+          core_version=$(node -p 'require("./package.json").dependencies["@ffmpeg/core"]')
+          if [[ "$FFMPEG_CORE_SOURCE_VERSION" != "$core_version" || "$FFMPEG_CORE_SOURCE_URL" != https://* ]]; then
+            echo "Configure the public corresponding source URL for @ffmpeg/core $core_version before publishing." >&2
+            exit 1
+          fi
+          curl --fail --silent --show-error --location --head --max-time 30 \
+            --proto '=https' --proto-redir '=https' "$FFMPEG_CORE_SOURCE_URL"
+      - uses: docker/setup-qemu-action@v4
+        with:
+          platforms: arm64
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ghcr.io/bhwa233/galaxy-downloader:${{ github.ref_name }}
+          build-args: |
+            FFMPEG_CORE_SOURCE_URL=${{ vars.FFMPEG_CORE_SOURCE_URL }}
+          labels: |
+            org.opencontainers.image.version=${{ github.ref_name }}
+            org.opencontainers.image.revision=${{ github.sha }}

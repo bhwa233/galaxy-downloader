@@ -1,0 +1,6 @@
+services:
+  galaxy-downloader:
+    image: "ghcr.io/bhwa233/galaxy-downloader:${GALAXY_VERSION:?Set GALAXY_VERSION to a published release tag}"
+    ports:
+      - "${GALAXY_BIND_IP:-127.0.0.1}:${GALAXY_PORT:-3010}:3010"
+    restart: unless-stopped

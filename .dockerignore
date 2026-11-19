@@ -1,0 +1,17 @@
+**
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!next.config.ts
+!vite.config.ts
+!postcss.config.mjs
+!tailwind.config.ts
+!tsconfig.json
+!LICENSE
+!scripts/
+!scripts/sync-ffmpeg-core.mjs
+!src/
+!src/**
+!public/
+!public/**
+public/ffmpeg-core/

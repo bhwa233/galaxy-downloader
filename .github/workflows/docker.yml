@@ -28,7 +28,7 @@ jobs:
           docker run --detach --name galaxy-downloader-ci \
             --publish 127.0.0.1:3010:3010 galaxy-downloader:ci
           base_url=http://127.0.0.1:3010
-          curl --fail --silent --show-error --retry 15 --retry-delay 2 --retry-connrefused \
+          curl --fail --silent --show-error --retry 15 --retry-delay 2 --retry-all-errors --max-time 5 \
             --output /tmp/galaxy-robots "$base_url/robots.txt"
           grep -Fx 'Disallow: /' /tmp/galaxy-robots
           curl --fail --silent --show-error --location --output /tmp/galaxy-home "$base_url/"

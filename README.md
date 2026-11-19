@@ -167,14 +167,14 @@ pnpm dev
 
 ### Docker 部署
 
-Docker 容器只运行 Web 应用，不包含解析后端。浏览器会把待解析的链接发送到 `https://downloader-api.bhwa233.com`，解析、下载和播放仍受公共 API 的可用性及限流影响。下载文件保存在浏览器所在的设备，无需挂载下载目录，也无需在 NAS 上安装 FFmpeg。
+Docker 容器只运行 Web 应用。镜像已内置公共后端地址 `https://downloader-api.bhwa233.com`，启动后即可使用，无需自行部署后端或配置 API 地址。浏览器直接请求公共 API，解析、下载和播放仍受其可用性及限流影响。下载文件保存在浏览器所在的设备，无需挂载下载目录，也无需在 NAS 上安装 FFmpeg。
 
 #### 使用已发布的镜像
 
-镜像发布后，可通过 Docker Compose 在 `linux/amd64` 或 `linux/arm64` 上部署，无需安装 Node.js 或 pnpm。将 [compose.yaml](./compose.yaml) 放到 Docker 主机，在同一目录创建 `.env`，并把 `vX.Y.Z` 替换为 `ghcr.io/bhwa233/galaxy-downloader` 中实际已发布的标签：
+已发布的镜像 `ghcr.io/bhwa233/galaxy-downloader:v6.3.2` 支持 `linux/amd64` 和 `linux/arm64`，可通过 Docker Compose 部署，无需安装 Node.js 或 pnpm。将 [compose.yaml](./compose.yaml) 放到 Docker 主机，在同一目录创建 `.env` 并写入：
 
 ```dotenv
-GALAXY_VERSION=vX.Y.Z
+GALAXY_VERSION=v6.3.2
 ```
 
 ```bash
@@ -189,7 +189,7 @@ docker compose ps
 
 #### 从源码构建
 
-在正式镜像发布前，可在仓库根目录执行：
+如需自行构建镜像，可在仓库根目录执行：
 
 ```bash
 docker build -t galaxy-downloader:local .
